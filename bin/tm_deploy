@@ -103,7 +103,7 @@ def _build_ansible_container_command(verbosity, action_command):
     project_dir = os.path.join(
         playbooks_dir, '../../container/projects/tissuemaps'
     )
-    cmd = ['ansible-container', '--project', os.path.abspath(project_dir)]
+    cmd = ['ansible-container', '--project-path', os.path.abspath(project_dir)]
     group_dirs = os.listdir(vars_dir)
     # NOTE: Ansible variables {{ }} declared in files are not expanded!
     for group in group_dirs:
@@ -238,8 +238,7 @@ def build_container(args):
     logger.info('build container images')
     roles_dir, vars_dir = _get_roles_and_variables_directories('tissuemaps')
     cmd = [
-        'build', '--from-scratch',
-        '--roles-path', os.path.abspath(roles_dir)
+        'build', '--no-cache', '--roles-path', os.path.abspath(roles_dir)
     ]
     # The following options are parsed to the "ansible-playbooks" command.
     cmd.append('--')
