@@ -109,10 +109,11 @@ setuptools.setup(
        'ansible-container>=0.9.0',
        'apache-libcloud>=1.3.0',
        'boto3>=1.4.1',
-       'docker-py>=1.10.6',
        'docker>=2.2',
+       'docker-py>=1.10.6',
        'PyYAML>=3.11',
        'psycopg2>=2.6.1',
+       'requests!=2.12.2,!=2.13.0,>=2.10.0',
        'shade>=1.12.1',
        'whichcraft>=0.4.0'
     ]
