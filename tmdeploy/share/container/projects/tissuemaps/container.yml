@@ -20,10 +20,46 @@ version: '2'
 # "volume" directive also has issues. Therefore, we handle this in the
 # docker-compose.yml file.
 
+settings:
+
+  conductor_base: tissuemaps/base
+
 services:
 
+  db_master:
+    from: tissuemaps/base
+    user: postgres
+    expose:
+      - '5043'
+    depends_on:
+      - db_worker
+    command:
+      - 'dumb-init'
+      - '/usr/lib/postgresql/9.6/bin/postgres'
+      - '-D'
+      - '/storage/postgresql/data/9.6/master'
+      - '-c'
+      - 'config_file=/etc/postgresql/9.6/master/postgresql.conf'
+    roles:
+      - database-server-master
+
+  db_worker:
+    from: tissuemaps/base
+    user: postgres
+    expose:
+      - '9700'
+    command:
+      - 'dumb-init'
+      - '/usr/lib/postgresql/9.6/bin/postgres'
+      - '-D'
+      - '/storage/postgresql/data/9.6/worker'
+      - '-c'
+      - 'config_file=/etc/postgresql/9.6/worker/postgresql.conf'
+    roles:
+      - database-server-worker
+
   web:
-    image: tissuemaps/base
+    from: tissuemaps/base
     user: tissuemaps
     working_dir: /home/tissuemaps
     ports:
@@ -41,9 +77,14 @@ services:
         - '/usr/bin/gulp'
         - '--gulpfile'
         - '/home/tissuemaps/tmui/src/gulpfile.js'
+    roles:
+      - role: web-server
+        web_port: 8002
+        app_host: app
+        app_port: 5002
 
   app:
-    image: tissuemaps/base
+    from: tissuemaps/base
     user: tissuemaps
     working_dir: /home/tissuemaps
     expose:
@@ -58,31 +99,8 @@ services:
         - 'dumb-init'
         - '/home/tissuemaps/.tmaps/tm_server.sh'
         - '-vv'
-
-  db_master:
-    image: tissuemaps/base
-    user: postgres
-    expose:
-      - '5043'
-    depends_on:
-      - db_worker
-    command:
-      - 'dumb-init'
-      - '/usr/lib/postgresql/9.6/bin/postgres'
-      - '-D'
-      - '/storage/postgresql/data/9.6/master'
-      - '-c'
-      - 'config_file=/etc/postgresql/9.6/master/postgresql.conf'
-
-  db_worker:
-    image: tissuemaps/base
-    user: postgres
-    expose:
-      - '9700'
-    command:
-      - 'dumb-init'
-      - '/usr/lib/postgresql/9.6/bin/postgres'
-      - '-D'
-      - '/storage/postgresql/data/9.6/worker'
-      - '-c'
-      - 'config_file=/etc/postgresql/9.6/worker/postgresql.conf'
+    roles:
+      - role: app-server
+        app_host: app
+        app_port: 5002
+        uwsgi_processes: 1
