@@ -106,16 +106,13 @@ setuptools.setup(
     include_package_data=True,
     install_requires=[
        'ansible>=2.2.1',
-       'ansible-container>=0.3.0,<=0.4',
+       'ansible-container>=0.9.0',
        'apache-libcloud>=1.3.0',
        'boto3>=1.4.1',
        'docker-py>=1.10.6',
-       # Ansible container requires a specific version of Docker compose.
-       'docker-compose==1.9.0',
+       'docker>=2.2',
        'PyYAML>=3.11',
        'psycopg2>=2.6.1',
-       # Ansible container requires a specific version of requests.
-       'requests==2.11.1',
        'shade>=1.12.1',
        'whichcraft>=0.4.0'
     ]
