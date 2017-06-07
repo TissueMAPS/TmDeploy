@@ -113,7 +113,6 @@ setuptools.setup(
        'docker-py>=1.10.6',
        'PyYAML>=3.11',
        'psycopg2>=2.6.1',
-       'requests!=2.12.2,!=2.13.0,>=2.10.0',
        'shade>=1.12.1',
        'whichcraft>=0.4.0'
     ]
