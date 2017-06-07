@@ -78,7 +78,10 @@ def _get_roles_and_variables_directories(name):
 
 def _get_group_variables(vars_dir):
     variables = collections.OrderedDict()
-    group_dirs = os.listdir(vars_dir)
+    if os.path.exists(vars_dir):
+        group_dirs = os.listdir(vars_dir)
+    else:
+        group_dirs = []
     for group in group_dirs:
         filename = os.path.abspath(
             os.path.join(vars_dir, group, 'vars.yml')
@@ -104,7 +107,10 @@ def _build_ansible_container_command(verbosity, action_command):
         playbooks_dir, '../../container/projects/tissuemaps'
     )
     cmd = ['ansible-container', '--project-path', os.path.abspath(project_dir)]
-    group_dirs = os.listdir(vars_dir)
+    if os.path.exists(vars_dir):
+        group_dirs = os.listdir(vars_dir)
+    else:
+        group_dirs = []
     # NOTE: Ansible variables {{ }} declared in files are not expanded!
     for group in group_dirs:
         filename = os.path.abspath(os.path.join(vars_dir, group, 'vars.yml'))
