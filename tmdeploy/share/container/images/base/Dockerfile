@@ -3,6 +3,7 @@ FROM ubuntu:xenial
 RUN apt-get update && apt-get -y install \
         aptitude \
         build-essential \
+        sudo \
         man \
         git \
         libssl-dev \
