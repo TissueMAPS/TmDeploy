@@ -16,4 +16,4 @@
 
 ---
 dependencies:
-  - {role: common}
+  - role: common
