@@ -42,7 +42,7 @@ services:
       - '-c'
       - 'config_file=/etc/postgresql/9.6/master/postgresql.conf'
     roles:
-      - database-server-master
+      - role: database-server-master
 
   db_worker:
     from: tissuemaps/base
@@ -57,7 +57,7 @@ services:
       - '-c'
       - 'config_file=/etc/postgresql/9.6/worker/postgresql.conf'
     roles:
-      - database-server-worker
+      - role: database-server-worker
 
   web:
     from: tissuemaps/base
