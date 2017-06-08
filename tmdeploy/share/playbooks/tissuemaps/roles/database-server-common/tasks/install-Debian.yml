@@ -43,7 +43,7 @@
   tags:
     - database
 
-- name: Install Citus PostgreSQL
+- name: Install apt packages required by Citus PostgreSQL
   apt:
     state: installed
     name: "{{ item }}"
