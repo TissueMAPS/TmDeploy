@@ -16,8 +16,8 @@
 ---
 version: '2'
 
-# NOTE: ansible-container doesn't support the "network" directive yet and the
-# "volume" directive also has issues. Therefore, we handle this in the
+# NOTE: ansible-container doesn't support the "networks" directive yet and the
+# "volumes" directive also has issues. Therefore, we handle this in the
 # docker-compose.yml file.
 
 settings:
@@ -80,6 +80,7 @@ services:
         - '/home/tissuemaps/tmui/src/gulpfile.js'
     roles:
       - role: web-server
+        web_user: tissuemaps
         web_port: 8002
         app_host: app
         app_port: 5002

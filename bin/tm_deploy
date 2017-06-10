@@ -103,10 +103,10 @@ def _get_group_variables(vars_dir):
 def _build_ansible_container_command(verbosity, action_command):
     playbooks_dir = _get_playbooks_dir('tissuemaps')
     roles_dir, vars_dir = _get_roles_and_variables_directories('tissuemaps')
-    project_dir = os.path.join(
+    project_dir = os.path.abspath(os.path.join(
         playbooks_dir, '../../container/projects/tissuemaps'
-    )
-    cmd = ['ansible-container', '--project-path', os.path.abspath(project_dir)]
+    ))
+    cmd = ['ansible-container', '--project-path', project_dir]
     if os.path.exists(vars_dir):
         group_dirs = os.listdir(vars_dir)
     else:
@@ -143,8 +143,10 @@ def _build_ansible_vm_command(verbosity, playbook, variables=dict()):
     return cmd
 
 
-def _run_command(command, environment):
-    process = subprocess.Popen(command, stdout=subprocess.PIPE, env=environment)
+def _run_command(command, environment, working_dir=None):
+    process = subprocess.Popen(
+        command, stdout=subprocess.PIPE, env=environment, cwd=working_dir
+    )
     while True:
       line = process.stdout.readline()
       if line != b'':
@@ -158,9 +160,13 @@ def _run_container_commands(commands):
     env = dict(os.environ)
     env['DOCKER_CLIENT_TIMEOUT'] = str(600)
     env['COMPOSE_HTTP_TIMEOUT'] = str(600)
+    # FIXME: Workaround bug in ansible-container 0.9.1
+    working_dir = os.path.abspath(os.path.join(
+        _get_playbooks_dir('tissuemaps'), '../../container/projects/tissuemaps'
+    ))
     for cmd in commands:
         logger.debug('command: %s', ' '.join(cmd))
-        _run_command(cmd, env)
+        _run_command(cmd, env, working_dir)
 
 
 def _run_vm_commands(commands):
@@ -248,7 +254,7 @@ def build_container(args):
         cmd.append('--no-cache')
     # Workaround ansible-container issue that doesn't install dependencies
     # correctly in conductor container.
-    cmd.append('--use-local-python')
+    # cmd.append('--use-local-python')
     # The following options are parsed to the "ansible-playbooks" command.
     cmd.append('--')
     verbosity = args.verbosity
