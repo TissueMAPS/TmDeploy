@@ -97,7 +97,7 @@
     owner: "{{ web_user }}"
     group: "{{ web_group }}"
     mode: 0700
-  when: ansible_env.ANSIBLE_CONTAINER is defined
+  when: ansible_connection == 'docker'
   tags:
     - web-server
     - nginx
@@ -109,7 +109,7 @@
     owner: "{{ web_user }}"
     group: "{{ web_group }}"
     mode: 0700
-  when: ansible_env.ANSIBLE_CONTAINER is undefined
+  when: ansible_connection != 'docker'
   tags:
     - web-server
     - nginx
@@ -121,7 +121,7 @@
     owner: "{{ web_user }}"
     group: "{{ web_group }}"
   when:
-    - ansible_env.ANSIBLE_CONTAINER is undefined
+    - ansible_connection != 'docker'
   tags:
     - web-server
     - nginx

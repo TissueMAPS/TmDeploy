@@ -25,7 +25,7 @@
     - create_slurm_account.sh
     - start_server.sh
     - stop_server.sh
-  when: ansible_env.ANSIBLE_CONTAINER is undefined
+  when: ansible_connection != 'docker'
   tags:
     - web
 

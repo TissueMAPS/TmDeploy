@@ -46,13 +46,13 @@
 - include: init-{{ ansible_os_family }}.yml
 
 - include: utils-{{ ansible_os_family }}.yml
-  when: ansible_env.ANSIBLE_CONTAINER is undefined
+  when: ansible_connection != 'docker'
 
 - include: ssh.yml
-  when: ansible_env.ANSIBLE_CONTAINER is undefined
+  when: ansible_connection != 'docker'
 
 - include: collectl.yml
-  when: ansible_env.ANSIBLE_CONTAINER is undefined
+  when: ansible_connection != 'docker'
 
 # Su problems might be fixed with the upcoming Ansible 2.4 release.
 # - name: Clone su-exec repository

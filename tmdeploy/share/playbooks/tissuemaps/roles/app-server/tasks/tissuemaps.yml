@@ -69,6 +69,6 @@
     owner: "{{ tm_user }}"
     group: "{{ tm_group }}"
     mode: 0700
-  when: ansible_env.ANSIBLE_CONTAINER is defined
+  when: ansible_connection == 'docker'
   tags:
     - tissuemaps

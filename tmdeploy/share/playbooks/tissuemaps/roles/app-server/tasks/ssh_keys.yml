@@ -20,7 +20,7 @@
     user: root
     key: https://github.com/{{ item }}.keys
   with_items: "{{ tm_admins }}"
-  when: ansible_env.ANSIBLE_CONTAINER is undefined
+  when: ansible_connection != 'docker'
   tags:
     - ssh
 
@@ -29,7 +29,7 @@
     user: "{{ tm_user }}"
     key: https://github.com/{{ item }}.keys
   with_items: "{{ tm_admins }}"
-  when: ansible_env.ANSIBLE_CONTAINER is undefined
+  when: ansible_connection != 'docker'
   tags:
     - ssh
 
